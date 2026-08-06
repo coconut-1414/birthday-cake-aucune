@@ -218,6 +218,114 @@
     card.setAttribute('class', 'sign-card');
     posG.appendChild(card);
 
+    // =============== 蕾丝花边（外层，围绕卡片一圈） ===============
+    // 卡片外框尺寸（含蕾丝外延）：宽 96，高 44，内部卡片 88x36
+    const laceW = 96, laceH = 44;
+    const laceX = -laceW / 2, laceY = -56; // 卡片上移一点（卡片bg y=-52, 蕾丝外延再高4）
+
+    // --- 蕾丝主边框（四角扇贝 + 每边齿状花边） ---
+    // 思路：画一个大矩形路径，每条边用连续的半圆弧（扇贝）代替直线
+    function buildLacePath(x, y, w, h, teeth) {
+      // teeth: 每边齿数（横向边用，纵向减半）
+      const rX = w / (teeth * 2);  // 横边每个扇贝半径（沿x方向）
+      const rY = h / (teeth * 2);  // 竖边每个扇贝半径（沿y方向）
+      let d = '';
+      // 顶边：从左上 → 右上，扇贝向上凸（用 Q 二次贝塞尔）
+      d += `M${x},${y}`;
+      for (let i = 0; i < teeth; i++) {
+        const sx = x + i * (w / teeth);
+        const ex = sx + w / teeth;
+        const mx = sx + w / teeth / 2;
+        const my = y - rX * 0.9; // 扇贝向上凸出
+        d += ` Q${mx},${my} ${ex},${y}`;
+      }
+      // 右边：右上 → 右下，扇贝向右凸
+      d += ` L${x + w},${y}`;
+      const vTeeth = Math.round(teeth * h / w);
+      for (let i = 0; i < vTeeth; i++) {
+        const sy = y + i * (h / vTeeth);
+        const ey = sy + h / vTeeth;
+        const my = sy + h / vTeeth / 2;
+        const mx = x + w + rY * 0.9;
+        d += ` Q${mx},${my} ${x + w},${ey}`;
+      }
+      // 底边：右下 → 左下，扇贝向下凸
+      d += ` L${x + w},${y + h}`;
+      for (let i = teeth - 1; i >= 0; i--) {
+        const sx = x + (i + 1) * (w / teeth);
+        const ex = i * (w / teeth) + x;
+        const mx = sx - w / teeth / 2;
+        const my = y + h + rX * 0.9;
+        d += ` Q${mx},${my} ${ex},${y + h}`;
+      }
+      // 左边：左下 → 左上，扇贝向左凸
+      d += ` L${x},${y + h}`;
+      for (let i = vTeeth - 1; i >= 0; i--) {
+        const sy = y + (i + 1) * (h / vTeeth);
+        const ey = y + i * (h / vTeeth);
+        const my = sy - h / vTeeth / 2;
+        const mx = x - rY * 0.9;
+        d += ` Q${mx},${my} ${x},${ey}`;
+      }
+      d += ' Z';
+      return d;
+    }
+
+    // 蕾丝外层（扇贝大轮廓，浅粉底+描边）
+    const laceOuter = document.createElementNS(NS, 'path');
+    laceOuter.setAttribute('d', buildLacePath(laceX, laceY, laceW, laceH, 10));
+    laceOuter.setAttribute('fill', '#FBE8EC');     // 莫兰迪浅粉
+    laceOuter.setAttribute('stroke', '#D5A5AE');  // 莫兰迪豆沙粉描边
+    laceOuter.setAttribute('stroke-width', '.8');
+    card.appendChild(laceOuter);
+
+    // 蕾丝内层（比外层小一圈，半透明叠加，增加层次感）
+    const laceInner = document.createElementNS(NS, 'path');
+    laceInner.setAttribute('d', buildLacePath(laceX + 3, laceY + 3, laceW - 6, laceH - 6, 8));
+    laceInner.setAttribute('fill', 'rgba(255,255,255,.35)');
+    laceInner.setAttribute('stroke', 'rgba(213,165,174,.45)');
+    laceInner.setAttribute('stroke-width', '.5');
+    card.appendChild(laceInner);
+
+    // --- 蕾丝小孔：每边扇贝凹处的小圆点（镂空感） ---
+    function addLaceHoles() {
+      const holes = [];
+      const teeth = 10, vTeeth = Math.round(teeth * laceH / laceW);
+      // 顶边孔
+      for (let i = 1; i < teeth; i++) {
+        holes.push({ cx: laceX + i * (laceW / teeth), cy: laceY - 1.5, r: 1 });
+      }
+      // 底边孔
+      for (let i = 1; i < teeth; i++) {
+        holes.push({ cx: laceX + i * (laceW / teeth), cy: laceY + laceH + 1.5, r: 1 });
+      }
+      // 右边孔
+      for (let i = 1; i < vTeeth; i++) {
+        holes.push({ cx: laceX + laceW + 1.5, cy: laceY + i * (laceH / vTeeth), r: 1 });
+      }
+      // 左边孔
+      for (let i = 1; i < vTeeth; i++) {
+        holes.push({ cx: laceX - 1.5, cy: laceY + i * (laceH / vTeeth), r: 1 });
+      }
+      // 四角大花孔
+      holes.push(
+        { cx: laceX, cy: laceY, r: 1.3 },
+        { cx: laceX + laceW, cy: laceY, r: 1.3 },
+        { cx: laceX, cy: laceY + laceH, r: 1.3 },
+        { cx: laceX + laceW, cy: laceY + laceH, r: 1.3 }
+      );
+      holes.forEach(h => {
+        const c = document.createElementNS(NS, 'circle');
+        c.setAttribute('cx', h.cx);
+        c.setAttribute('cy', h.cy);
+        c.setAttribute('r', h.r);
+        c.setAttribute('fill', '#D5A5AE');
+        c.setAttribute('opacity', '.7');
+        card.appendChild(c);
+      });
+    }
+    addLaceHoles();
+
     // 牙签（下端插在蛋糕里，上端支撑卡片）
     const stick = document.createElementNS(NS, 'line');
     stick.setAttribute('x1', '0'); stick.setAttribute('y1', '12');
@@ -227,27 +335,27 @@
     stick.setAttribute('stroke-linecap', 'round');
     card.appendChild(stick);
 
-    // 卡片背景（带描边）
+    // 卡片背景（在蕾丝内部）
     const bg = document.createElementNS(NS, 'rect');
-    bg.setAttribute('x', '-44'); bg.setAttribute('y', '-52');
-    bg.setAttribute('width', '88'); bg.setAttribute('height', '36');
-    bg.setAttribute('rx', '4');
+    bg.setAttribute('x', '-40'); bg.setAttribute('y', '-48');
+    bg.setAttribute('width', '80'); bg.setAttribute('height', '28');
+    bg.setAttribute('rx', '2');
     bg.setAttribute('fill', '#FFFBF0');
-    bg.setAttribute('stroke', '#C9A961');
-    bg.setAttribute('stroke-width', '1.2');
+    bg.setAttribute('stroke', '#D5A5AE');
+    bg.setAttribute('stroke-width', '.9');
     card.appendChild(bg);
 
-    // 顶部小爱心装饰
+    // 顶部小爱心装饰（在卡片背景上方中央，浮在内层蕾丝上）
     const heart = document.createElementNS(NS, 'text');
-    heart.setAttribute('x', '0'); heart.setAttribute('y', '-41');
+    heart.setAttribute('x', '0'); heart.setAttribute('y', '-50');
     heart.setAttribute('text-anchor', 'middle');
-    heart.setAttribute('font-size', '8');
-    heart.setAttribute('fill', '#E59AA8');
+    heart.setAttribute('font-size', '7');
+    heart.setAttribute('fill', '#D5A5AE');
     heart.textContent = '♡';
     card.appendChild(heart);
 
     // 签名图片（按比例缩放嵌入卡片中部）
-    const maxW = 78, maxH = 20;
+    const maxW = 70, maxH = 16;
     let iw = cw, ih = ch;
     const s = Math.min(maxW / iw, maxH / ih);
     iw *= s; ih *= s;
@@ -443,25 +551,26 @@
     const defs = svgEl.querySelector('defs');
 
     const creamDefs = `
+      <!-- 莫兰迪色系裱花渐变 -->
       <radialGradient id="creamG1" cx="50%" cy="15%" r="80%">
         <stop offset="0%" stop-color="#FFFFFF"/>
-        <stop offset="45%" stop-color="#FFF0F3"/>
-        <stop offset="100%" stop-color="#E892A4"/>
+        <stop offset="45%" stop-color="#F9EEF1"/>
+        <stop offset="100%" stop-color="#CFA0A9"/>
       </radialGradient>
       <radialGradient id="creamG2" cx="50%" cy="15%" r="80%">
         <stop offset="0%" stop-color="#FFFFFF"/>
-        <stop offset="45%" stop-color="#FFF6E8"/>
-        <stop offset="100%" stop-color="#EDB890"/>
+        <stop offset="45%" stop-color="#FAF1E7"/>
+        <stop offset="100%" stop-color="#D1B29A"/>
       </radialGradient>
       <radialGradient id="creamG3" cx="50%" cy="15%" r="80%">
         <stop offset="0%" stop-color="#FFFFFF"/>
-        <stop offset="45%" stop-color="#F4ECFC"/>
-        <stop offset="100%" stop-color="#B898D4"/>
+        <stop offset="45%" stop-color="#F3EEFA"/>
+        <stop offset="100%" stop-color="#AE9EC0"/>
       </radialGradient>
       <filter id="creamShadow" x="-20%" y="-20%" width="140%" height="160%">
         <feGaussianBlur in="SourceAlpha" stdDeviation="1"/>
         <feOffset dx="0" dy="1.5"/>
-        <feComponentTransfer><feFuncA type="linear" slope="0.35"/></feComponentTransfer>
+        <feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
         <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
       </filter>
     `;
