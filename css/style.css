@@ -346,6 +346,36 @@ body::after{
 .tool-hint{font-family:var(--en);font-size:.62rem;color:var(--ink-soft);letter-spacing:.06em}
 .tool-done{font-family:var(--hand);font-size:1.1rem;color:var(--rose-deep);letter-spacing:.04em}
 
+/* 签名区 */
+.sign-pad{
+  position:relative;
+  width:280px;height:90px;
+  background:#FFFBF0;
+  border:1px solid var(--gold-soft);
+  border-radius:4px;
+  box-shadow:inset 0 1px 4px rgba(92,74,58,.08);
+  overflow:hidden;
+}
+.sign-pad::after{
+  content:'';position:absolute;left:12px;right:12px;bottom:14px;
+  height:1px;background:repeating-linear-gradient(90deg,rgba(201,169,97,.35) 0 6px,transparent 6px 12px);
+  pointer-events:none;
+}
+#signCanvas{
+  display:block;width:280px;height:90px;
+  cursor:crosshair;touch-action:none;
+}
+.sign-clear{
+  position:absolute;right:6px;top:6px;
+  font-family:var(--en);font-size:.6rem;letter-spacing:.08em;
+  color:var(--ink-soft);background:rgba(255,255,255,.8);
+  border:1px solid var(--gold-soft);border-radius:999px;
+  padding:3px 10px;cursor:pointer;text-transform:uppercase;
+  transition:all .2s;
+}
+.sign-clear:hover{color:var(--rose);border-color:var(--rose)}
+#signDone{margin-top:2px}
+
 /* 裱花调色板 */
 .pipe-palette,.topping-palette{display:flex;gap:8px;align-items:center}
 .pipe-color{

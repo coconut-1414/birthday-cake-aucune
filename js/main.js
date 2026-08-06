@@ -38,7 +38,7 @@
     return pt.matrixTransform(svgEl.getScreenCTM().inverse());
   }
 
-  const stepHints = ['bake', 'cream', 'pipe', 'decorate'];
+  const stepHints = ['bake', 'cream', 'pipe', 'decorate', 'sign'];
 
   const colors = ['#E59AA8','#F0BFA0','#B79FD0','#9DC7B0','#F0CD7A','#A04040','#C9A961','#FF8A3D','#FFD86B','#D9A4AB'];
   const sparkleChars = ['✦','✧','♡','❀','✿','★','◆','●'];
@@ -55,8 +55,9 @@
     if (candlesBox.classList.contains('hidden')) return;
     const svgRect = svgEl.getBoundingClientRect();
     const sceneRect = cakeScene.getBoundingClientRect();
-    // 蛋糕顶层中心位于 viewBox y≈176（顶层 ellipse cy=190, ry=14 → 顶面 y=176）
-    const topY = (176 / 360) * svgRect.height;
+    // 蛋糕顶层椭圆 cx=200 cy=190 ry=14，顶面中心 y=190
+    // 让蜡烛底部插入到椭圆中心稍下（y≈196），使其"立"在顶面里而非飘在弧顶上方
+    const topY = (196 / 360) * svgRect.height;
     candlesBox.style.left = (svgRect.left - sceneRect.left + svgRect.width / 2) + 'px';
     candlesBox.style.top = (svgRect.top - sceneRect.top + topY) + 'px';
   }
@@ -110,6 +111,175 @@
       toppingPalette.querySelectorAll('.topping').forEach(x => x.classList.remove('active'));
       b.classList.add('active');
     });
+
+    initSignature();
+  }
+
+  /* ---------- 签名功能（步骤5） ---------- */
+  const signCanvas = document.getElementById('signCanvas');
+  const signCtx = signCanvas.getContext('2d');
+  const signDoneBtn = document.getElementById('signDone');
+  const signClearBtn = document.getElementById('signClear');
+  let signing = false;
+  let hasSigned = false;
+  let lastPt = null;
+
+  function initSignature() {
+    // 固定内部分辨率（CSS 控制显示尺寸，避免隐藏时 getBoundingClientRect 为 0）
+    signCanvas.width = 560;
+    signCanvas.height = 180;
+    signCtx.strokeStyle = '#7E2E2E';
+    signCtx.lineWidth = 2.6;
+    signCtx.lineCap = 'round';
+    signCtx.lineJoin = 'round';
+
+    function getPos(e) {
+      const r = signCanvas.getBoundingClientRect();
+      const t = e.touches ? e.touches[0] : e;
+      const sx = signCanvas.width / (r.width || 280);
+      const sy = signCanvas.height / (r.height || 90);
+      return { x: (t.clientX - r.left) * sx, y: (t.clientY - r.top) * sy };
+    }
+    function start(e) {
+      e.preventDefault();
+      signing = true;
+      hasSigned = true;
+      lastPt = getPos(e);
+    }
+    function move(e) {
+      if (!signing) return;
+      e.preventDefault();
+      const pt = getPos(e);
+      signCtx.beginPath();
+      signCtx.moveTo(lastPt.x, lastPt.y);
+      signCtx.lineTo(pt.x, pt.y);
+      signCtx.stroke();
+      lastPt = pt;
+    }
+    function end() { signing = false; }
+
+    signCanvas.addEventListener('mousedown', start);
+    signCanvas.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end);
+    signCanvas.addEventListener('mouseleave', end);
+    signCanvas.addEventListener('touchstart', start, { passive: false });
+    signCanvas.addEventListener('touchmove', move, { passive: false });
+    signCanvas.addEventListener('touchend', end);
+
+    signClearBtn.addEventListener('click', () => {
+      signCtx.clearRect(0, 0, signCanvas.width, signCanvas.height);
+      hasSigned = false;
+    });
+    signDoneBtn.addEventListener('click', finishSignature);
+  }
+
+  // 完成签名：把签名转图片，做成小卡片插在蛋糕顶层
+  function finishSignature() {
+    if (!hasSigned) {
+      showToast('please sign first · 请先签名');
+      return;
+    }
+    // 裁剪签名非空白区域
+    const w = signCanvas.width, h = signCanvas.height;
+    const data = signCtx.getImageData(0, 0, w, h).data;
+    let minX = w, minY = h, maxX = 0, maxY = 0, found = false;
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        if (data[(y * w + x) * 4 + 3] > 10) {
+          found = true;
+          if (x < minX) minX = x;
+          if (x > maxX) maxX = x;
+          if (y < minY) minY = y;
+          if (y > maxY) maxY = y;
+        }
+      }
+    }
+    if (!found) { showToast('please sign first · 请先签名'); return; }
+    const pad = 6;
+    minX = Math.max(0, minX - pad); minY = Math.max(0, minY - pad);
+    maxX = Math.min(w, maxX + pad); maxY = Math.min(h, maxY + pad);
+    const cw = maxX - minX, ch = maxY - minY;
+    const tmp = document.createElement('canvas');
+    tmp.width = cw; tmp.height = ch;
+    tmp.getContext('2d').drawImage(signCanvas, minX, minY, cw, ch, 0, 0, cw, ch);
+    const dataUrl = tmp.toDataURL('image/png');
+
+    // 在蛋糕顶层 SVG 中插入签名卡片
+    const NS = 'http://www.w3.org/2000/svg';
+    const topLayer = layers.find(l => l.classList.contains('g-l1'));
+    const zone = topLayer.querySelector('.deco-zone');
+
+    // ⭐ 分离定位层和动画层：外层只做translate定位（SVG属性，不被CSS覆盖）
+    const posG = document.createElementNS(NS, 'g');
+    posG.setAttribute('transform', 'translate(200, 176)'); // 顶层椭圆弧顶附近，牙签插在蛋糕里
+
+    // 内层：动画层 + 所有卡片内容
+    const card = document.createElementNS(NS, 'g');
+    card.setAttribute('class', 'sign-card');
+    posG.appendChild(card);
+
+    // 牙签（下端插在蛋糕里，上端支撑卡片）
+    const stick = document.createElementNS(NS, 'line');
+    stick.setAttribute('x1', '0'); stick.setAttribute('y1', '12');
+    stick.setAttribute('x2', '0'); stick.setAttribute('y2', '-14');
+    stick.setAttribute('stroke', '#C9A961');
+    stick.setAttribute('stroke-width', '1.8');
+    stick.setAttribute('stroke-linecap', 'round');
+    card.appendChild(stick);
+
+    // 卡片背景（带描边）
+    const bg = document.createElementNS(NS, 'rect');
+    bg.setAttribute('x', '-44'); bg.setAttribute('y', '-52');
+    bg.setAttribute('width', '88'); bg.setAttribute('height', '36');
+    bg.setAttribute('rx', '4');
+    bg.setAttribute('fill', '#FFFBF0');
+    bg.setAttribute('stroke', '#C9A961');
+    bg.setAttribute('stroke-width', '1.2');
+    card.appendChild(bg);
+
+    // 顶部小爱心装饰
+    const heart = document.createElementNS(NS, 'text');
+    heart.setAttribute('x', '0'); heart.setAttribute('y', '-41');
+    heart.setAttribute('text-anchor', 'middle');
+    heart.setAttribute('font-size', '8');
+    heart.setAttribute('fill', '#E59AA8');
+    heart.textContent = '♡';
+    card.appendChild(heart);
+
+    // 签名图片（按比例缩放嵌入卡片中部）
+    const maxW = 78, maxH = 20;
+    let iw = cw, ih = ch;
+    const s = Math.min(maxW / iw, maxH / ih);
+    iw *= s; ih *= s;
+    const img = document.createElementNS(NS, 'image');
+    img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', dataUrl);
+    img.setAttribute('href', dataUrl);
+    img.setAttribute('x', (-iw / 2).toFixed(1));
+    img.setAttribute('y', (-34 - ih / 2).toFixed(1));
+    img.setAttribute('width', iw.toFixed(1));
+    img.setAttribute('height', ih.toFixed(1));
+    img.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    card.appendChild(img);
+
+    // ⭐ 入场动画只作用于内层 card，不影响外层 posG 的 translate 定位
+    card.style.transformBox = 'fill-box';
+    card.style.transformOrigin = 'center bottom';
+    card.style.opacity = '0';
+    card.style.transform = 'translate(0, 16px) scale(.35)';
+    card.style.transition = 'opacity .45s, transform .65s cubic-bezier(.34,1.56,.64,1)';
+    zone.appendChild(posG);
+    requestAnimationFrame(() => {
+      card.style.opacity = '1';
+      card.style.transform = 'translate(0, 0) scale(1)';
+    });
+    spawnSparkles(card, 14);
+    spawnConfetti(30);
+
+    showToast('signed ♡ 签名已留在蛋糕上');
+    signDoneBtn.disabled = true;
+    setTimeout(() => {
+      finishCake(); // 进入蜡烛阶段
+    }, 900);
   }
 
   // 根据SVG y坐标选择最近的可装饰蛋糕层
@@ -167,7 +337,7 @@
   function getToppingInnerSvg(type) {
     if (type === 'strawberry') {
       return `
-        <g transform="translate(-9,-9) scale(1.05)">
+        <g transform="translate(-9,-9) scale(1.7)">
           <path d="M9 3 C6 3 4 6 4 10 C4 14 6 16 9 16 C12 16 14 14 14 10 C14 6 12 3 9 3 Z" fill="#E8788C"/>
           <path d="M6 3 L7 1 L9 2 L11 1 L12 3 L9 4 Z" fill="#7CB342"/>
           <circle cx="7" cy="8" r=".6" fill="#fff"/>
@@ -178,7 +348,7 @@
     }
     if (type === 'macaron') {
       return `
-        <g transform="translate(-9,-9) scale(1.1)">
+        <g transform="translate(-9,-9) scale(1.8)">
           <ellipse cx="9" cy="6" rx="6" ry="2.5" fill="#F7C8D2"/>
           <ellipse cx="9" cy="12" rx="6" ry="2.5" fill="#F7C8D2"/>
           <rect x="3" y="7.5" width="12" height="3" fill="#FBE0D0"/>
@@ -187,7 +357,7 @@
     }
     if (type === 'flower') {
       return `
-        <g transform="translate(-9,-9) scale(1.05)">
+        <g transform="translate(-9,-9) scale(1.7)">
           <g fill="#F7C8D2">
             <circle cx="9" cy="5" r="3"/>
             <circle cx="5" cy="9" r="3"/>
@@ -200,7 +370,7 @@
     }
     if (type === 'star') {
       return `
-        <g transform="translate(-9,-9) scale(1.1)">
+        <g transform="translate(-9,-9) scale(1.8)">
           <path d="M9 2 L11 7 L16 7.5 L12 11 L13 16 L9 13.5 L5 16 L6 11 L2 7.5 L7 7 Z" fill="#FBE3A0" stroke="#E8C878" stroke-width=".5"/>
         </g>`;
     }
@@ -216,7 +386,7 @@
     stepLines.forEach((l, i) => l.classList.toggle('done', i < n));
     toolPanels.forEach(p => p.classList.toggle('active', +p.dataset.step === n));
     cakeScene.classList.toggle('clickable', n === 2 || n === 3);
-    if (litNumEl) litNumEl.textContent = Math.min(n + 1, 4);
+    if (litNumEl) litNumEl.textContent = Math.min(n + 1, 5);
     if (stepHintEl && stepHints[n]) stepHintEl.textContent = stepHints[n];
     // 工具元素显隐
     creamBowl.classList.toggle('show', n === 1);
@@ -387,26 +557,37 @@
     if (decoCount >= 5) return;
     const zone = layer.querySelector('.deco-zone');
     if (!zone) return;
-    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    g.setAttribute('class', 'deco-item');
-    g.setAttribute('transform', `translate(${p.x},${p.y})`);
-    // 解析SVG片段并附加到g
-    const tmp = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    tmp.innerHTML = getToppingInnerSvg(topping);
-    while (tmp.firstChild) g.appendChild(tmp.firstChild);
-    zone.appendChild(g);
-    spawnSparkles(g, 5);
+    const NS = 'http://www.w3.org/2000/svg';
+    // ⭐ 分离定位层和动画层：外层只做translate定位（SVG属性，不被CSS覆盖），内层做CSS动画
+    const wrap = `<svg xmlns="${NS}"><g transform="translate(${p.x.toFixed(1)},${p.y.toFixed(1)})"><g class="deco-item">${getToppingInnerSvg(topping)}</g></g></svg>`;
+    const doc = new DOMParser().parseFromString(wrap, 'image/svg+xml');
+    const posG = doc.documentElement.firstElementChild; // 定位层
+    if (!posG) return;
+    const importedPos = document.importNode(posG, true);
+    const animG = importedPos.firstElementChild; // 动画层
+    // 弹出动画只作用于内层，不影响外层的translate定位
+    animG.style.transformBox = 'fill-box';
+    animG.style.transformOrigin = 'center';
+    animG.style.opacity = '0';
+    animG.style.transform = 'scale(.3)';
+    animG.style.transition = 'opacity .35s, transform .5s cubic-bezier(.34,1.56,.64,1)';
+    zone.appendChild(importedPos);
+    requestAnimationFrame(() => {
+      animG.style.opacity = '1';
+      animG.style.transform = 'scale(1)';
+    });
+    spawnSparkles(animG, 6);
     decoCount++;
     decoCountEl.textContent = decoCount;
     if (decoCount >= 5) {
       showToast('decorated · 装饰完成');
-      setTimeout(finishCake, 700);
+      setTimeout(() => setStep(4), 700); // 进入签名步骤
     }
   }
 
-  // 完成：生成5根蜡烛
+  // 完成：生成7根蜡烛
   function finishCake() {
-    setStep(4);
+    setStep(5);
     candlesBox.classList.remove('hidden');
     candlesBox.classList.add('appear');
     const candleColors = ['', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'];
