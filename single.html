@@ -502,7 +502,7 @@ body::after{
 .env-stage.fade-in{animation:envFadeIn .6s ease-out}
 @keyframes envFadeIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
 .env-sleeve{
-  position:relative;width:240px;height:170px;
+  position:relative;width:320px;height:226px;
   cursor:pointer;user-select:none;
   transition:transform .4s ease;
   overflow:hidden;
@@ -539,46 +539,46 @@ body::after{
 }
 .letter-head{
   display:flex;justify-content:space-between;align-items:center;
-  padding:12px 14px 6px;
+  padding:16px 18px 8px;
   border-bottom:1px dashed rgba(201,169,97,.35);
 }
 .letter-eyebrow{
-  font-family:var(--serif);font-style:italic;font-size:.78rem;
+  font-family:var(--serif);font-style:italic;font-size:.92rem;
   color:var(--ink-soft);letter-spacing:.06em;
 }
 .letter-stamp{
-  font-family:var(--serif);font-weight:600;font-size:.68rem;
+  font-family:var(--serif);font-weight:600;font-size:.8rem;
   color:#fff;background:var(--rose-deep);
-  padding:3px 7px;border-radius:2px;
+  padding:4px 9px;border-radius:2px;
   transform:rotate(6deg);box-shadow:0 1px 3px rgba(0,0,0,.2);
 }
 .letter-body{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:8px;text-align:center;padding:0 14px;
+  gap:10px;text-align:center;padding:0 18px;
 }
 .letter-main{
-  font-family:var(--cn);font-weight:400;font-size:1.5rem;
+  font-family:var(--cn);font-weight:400;font-size:1.8rem;
   color:var(--rose-deep);letter-spacing:.22em;
   text-shadow:0 1px 0 rgba(255,255,255,.6);
 }
-.letter-divider{color:var(--gold);font-size:.9rem}
+.letter-divider{color:var(--gold);font-size:1.1rem}
 .letter-sign{
-  font-family:var(--hand);font-size:1rem;color:var(--ink-soft);
+  font-family:var(--hand);font-size:1.2rem;color:var(--ink-soft);
 }
 .letter-foot{
   display:flex;justify-content:space-between;align-items:center;
-  padding:6px 14px 10px;
+  padding:8px 18px 12px;
   border-top:1px dashed rgba(201,169,97,.35);
 }
 .letter-wax{
-  width:24px;height:24px;border-radius:50%;
+  width:30px;height:30px;border-radius:50%;
   background:radial-gradient(circle at 32% 28%,#C86060,var(--rose-deep) 70%);
   display:flex;align-items:center;justify-content:center;
-  font-family:var(--serif);font-style:italic;font-size:.72rem;color:#F5E7C0;
+  font-family:var(--serif);font-style:italic;font-size:.85rem;color:#F5E7C0;
   box-shadow:0 1px 3px rgba(0,0,0,.3),inset 0 0 0 1px rgba(255,255,255,.2);
 }
 .letter-date{
-  font-family:var(--serif);font-style:italic;font-size:.7rem;
+  font-family:var(--serif);font-style:italic;font-size:.82rem;
   color:var(--ink-soft);letter-spacing:.1em;
 }
 /* 封套前盖（带V型开口，遮住信纸下半部） */
@@ -688,7 +688,7 @@ body::after{
   .center{flex-direction:column;gap:8px}
   .bakery{flex:1 1 auto;padding:8px 10px 10px}
   .env-stage{flex:1 1 auto;gap:10px;padding:14px}
-  .env-sleeve{width:220px;height:156px}
+  .env-sleeve{width:290px;height:205px}
   .letter-main{font-size:1.3rem}
   .stage{padding:10px 16px 8px;gap:6px}
   .who-name{font-size:1.25rem}
@@ -704,10 +704,10 @@ body::after{
   .step-line{width:16px}
 }
 @media(max-width:520px){
-  .env-sleeve{width:200px;height:142px}
-  .letter-main{font-size:1.15rem;letter-spacing:.12em}
-  .letter-eyebrow{font-size:.7rem}
-  .letter-sign{font-size:.9rem}
+  .env-sleeve{width:260px;height:184px}
+  .letter-main{font-size:1.35rem;letter-spacing:.12em}
+  .letter-eyebrow{font-size:.75rem}
+  .letter-sign{font-size:.95rem}
   .blow{padding:9px 24px;font-size:.78rem;letter-spacing:.12em}
   .music-label{display:none}
   .music{padding:6px 10px}
