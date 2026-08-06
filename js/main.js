@@ -50,16 +50,18 @@
   let litCount = 0;
   let musicOn = false;
 
-  // 蜡烛定位：同步 candles 容器位置到 SVG 顶部蛋糕顶层
+  // 蜡烛定位：用 getScreenCTM 精确换算 SVG坐标→屏幕坐标（避免 preserveAspectRatio 导致偏移）
   function syncCandlesPos() {
     if (candlesBox.classList.contains('hidden')) return;
-    const svgRect = svgEl.getBoundingClientRect();
+    const ctm = svgEl.getScreenCTM();
+    if (!ctm) return;
+    // 蛋糕顶层椭圆 cx=200 cy=190 ry=14，蜡烛底部立在顶面中心
+    const pt = svgEl.createSVGPoint();
+    pt.x = 200; pt.y = 192; // 顶面中心稍下，让蜡烛"插"在蛋糕里
+    const screen = pt.matrixTransform(ctm);
     const sceneRect = cakeScene.getBoundingClientRect();
-    // 蛋糕顶层椭圆 cx=200 cy=190 ry=14，顶面中心 y=190
-    // 让蜡烛底部插入到椭圆中心稍下（y≈196），使其"立"在顶面里而非飘在弧顶上方
-    const topY = (196 / 360) * svgRect.height;
-    candlesBox.style.left = (svgRect.left - sceneRect.left + svgRect.width / 2) + 'px';
-    candlesBox.style.top = (svgRect.top - sceneRect.top + topY) + 'px';
+    candlesBox.style.left = (screen.x - sceneRect.left) + 'px';
+    candlesBox.style.top = (screen.y - sceneRect.top) + 'px';
   }
   window.addEventListener('resize', syncCandlesPos);
 
@@ -369,16 +371,15 @@
     img.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     card.appendChild(img);
 
-    // ⭐ 入场动画只作用于内层 card，不影响外层 posG 的 translate 定位
-    card.style.transformBox = 'fill-box';
-    card.style.transformOrigin = 'center bottom';
+    // ⭐ 入场动画：从原点(牙签位置)缩放，卡片从蛋糕上"长"出来
     card.style.opacity = '0';
-    card.style.transform = 'translate(0, 16px) scale(.35)';
+    card.style.transform = 'scale(.35)';
+    card.style.transformOrigin = '0 0';
     card.style.transition = 'opacity .45s, transform .65s cubic-bezier(.34,1.56,.64,1)';
     zone.appendChild(posG);
     requestAnimationFrame(() => {
       card.style.opacity = '1';
-      card.style.transform = 'translate(0, 0) scale(1)';
+      card.style.transform = 'scale(1)';
     });
     spawnSparkles(card, 14);
     spawnConfetti(30);
@@ -674,11 +675,10 @@
     if (!posG) return;
     const importedPos = document.importNode(posG, true);
     const animG = importedPos.firstElementChild; // 动画层
-    // 弹出动画只作用于内层，不影响外层的translate定位
-    animG.style.transformBox = 'fill-box';
-    animG.style.transformOrigin = 'center';
+    // 弹出动画：内容已居中在原点(0,0)，用默认 SVG transform-origin 即可，不依赖 fill-box
     animG.style.opacity = '0';
     animG.style.transform = 'scale(.3)';
+    animG.style.transformOrigin = '0 0';
     animG.style.transition = 'opacity .35s, transform .5s cubic-bezier(.34,1.56,.64,1)';
     zone.appendChild(importedPos);
     requestAnimationFrame(() => {
