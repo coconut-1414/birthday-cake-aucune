@@ -1,0 +1,723 @@
+/* ===== RESET ===== */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --ink:#5C4A3A;
+  --ink-soft:#8A7560;
+  --gold:#C9A961;
+  --gold-deep:#A8894A;
+  --gold-soft:#E0D2B0;
+  --rose:#A04040;
+  --rose-deep:#7E2E2E;
+  --rose-soft:#D9A4AB;
+  --cream:#FBF5E8;
+  --cream-2:#F5ECD9;
+  --pink-1:#FCE4EC;
+  --pink-2:#F7C8D2;
+  --pink-3:#E59AA8;
+  --mint:#C8E0D2;
+  --lilac:#D8C5E8;
+  --peach:#FBE0D0;
+  --lemon:#FBE3A0;
+  --sponge:#E8C9A0;
+  --sponge-2:#D9B486;
+  --serif:'Cormorant Garamond',serif;
+  --hand:'Caveat',cursive;
+  --en:'Quicksand',sans-serif;
+  --cn:'Noto Serif SC',serif;
+}
+html,body{
+  width:100%;height:100%;overflow:hidden;
+  font-family:var(--cn);color:var(--ink);font-weight:300;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ===== 极繁少女风背景 ===== */
+.bg{
+  position:fixed;inset:0;z-index:0;
+  background-image:url('../images/bg_fancy.jpg');
+  background-size:cover;background-position:center;
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:rgba(255,253,245,.22);
+}
+
+/* ===== INTRO ===== */
+.intro{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(255,253,245,.94);
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .7s,visibility .7s;
+}
+.intro.hide{opacity:0;visibility:hidden;pointer-events:none}
+.intro-card{
+  text-align:center;padding:42px 44px;
+  border:1px solid var(--gold-soft);border-radius:2px;
+  background:rgba(255,255,255,.7);
+  max-width:340px;width:calc(100% - 48px);
+  box-shadow:0 20px 60px -28px rgba(92,74,58,.3);
+  animation:cardIn .9s cubic-bezier(.22,1,.36,1);
+}
+.intro-from{font-family:var(--hand);font-size:1.25rem;color:var(--ink-soft);margin-bottom:8px;letter-spacing:.04em}
+.intro-title{
+  font-family:var(--serif);font-weight:500;font-style:italic;
+  font-size:2.4rem;color:var(--ink);line-height:1.1;
+  letter-spacing:.01em;margin-bottom:26px;
+}
+.intro-title span{color:var(--rose);font-style:italic}
+.intro-btn{
+  font-family:var(--serif);font-size:1rem;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--ink);
+  background:transparent;border:1px solid var(--gold);
+  padding:10px 36px;cursor:pointer;transition:all .3s;
+}
+.intro-btn:hover{background:var(--gold);color:#fff;letter-spacing:.4em}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== STAGE ===== */
+.stage{
+  position:relative;z-index:2;
+  width:100%;height:100vh;height:100dvh;
+  max-width:1180px;margin:0 auto;
+  padding:14px 24px 10px;
+  display:flex;flex-direction:column;gap:8px;
+}
+
+/* ===== TOPBAR ===== */
+.topbar{display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.who{display:flex;align-items:center;gap:11px}
+.who-badge{
+  width:46px;height:46px;border-radius:50%;
+  background:linear-gradient(135deg,var(--pink-2),var(--rose-soft));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px -4px rgba(229,154,168,.5),inset 0 0 0 2px rgba(255,255,255,.6);
+  position:relative;
+}
+.who-badge::before{
+  content:'';position:absolute;inset:-4px;border-radius:50%;
+  border:1px dashed var(--gold);opacity:.7;
+  animation:spin 12s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.who-star{color:#fff;font-size:1.1rem;filter:drop-shadow(0 1px 2px rgba(0,0,0,.15))}
+.who-text{line-height:1.1}
+.who-name{font-family:var(--serif);font-style:italic;font-weight:600;font-size:1.4rem;color:var(--ink)}
+.who-sub{font-family:var(--hand);font-size:.95rem;color:var(--ink-soft)}
+.music{
+  display:flex;align-items:center;gap:8px;
+  padding:6px 14px;background:rgba(255,255,255,.7);
+  border:1px solid var(--gold-soft);border-radius:999px;
+  cursor:pointer;font-family:var(--en);font-size:.7rem;
+  letter-spacing:.18em;color:var(--ink-soft);
+  text-transform:uppercase;transition:all .25s;
+}
+.music:hover{border-color:var(--gold);color:var(--ink)}
+.music-dot{width:7px;height:7px;border-radius:50%;background:var(--gold-soft);transition:all .3s}
+.music.on .music-dot{background:var(--rose);box-shadow:0 0 0 3px rgba(160,64,64,.18)}
+.music.on{color:var(--ink)}
+
+/* ===== CENTER ===== */
+.center{
+  flex:1;min-height:0;
+  display:flex;align-items:stretch;justify-content:center;
+  gap:22px;
+}
+
+/* ========== BAKERY (制作台) ========== */
+.bakery{
+  flex:1 1 60%;min-width:0;min-height:0;overflow:hidden;
+  display:flex;flex-direction:column;
+  background:rgba(255,253,245,.55);
+  border:1px solid var(--gold-soft);border-radius:6px;
+  padding:10px 14px 12px;
+  box-shadow:0 8px 26px -16px rgba(92,74,58,.25);
+  backdrop-filter:blur(2px);
+}
+
+/* 蛋糕展示区 */
+.cake-scene{
+  position:relative;flex:1;min-height:0;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.cake-svg{
+  height:100%;width:auto;max-width:100%;
+  display:block;
+  filter:drop-shadow(0 8px 14px rgba(92,74,58,.18));
+}
+/* SVG蛋糕层显隐（胚先隐藏） */
+.g-layer{opacity:0;transition:opacity .5s;transform-origin:50% 100%;transform:scaleY(0)}
+.g-layer.shown{opacity:1;transform:scaleY(1)}
+/* 奶油化：胚隐藏，奶油显示（丝滑渐入） */
+.g-layer.creamed .sponge{opacity:0;transition:opacity 1s ease-out}
+.g-layer.creamed .sponge-top{opacity:0;transition:opacity 1s ease-out}
+.g-layer .cream3,.g-layer .cream2,.g-layer .cream1{transition:opacity 1.3s cubic-bezier(.22,.61,.36,1)}
+.g-layer.creamed .cream3,.g-layer.creamed .cream2,.g-layer.creamed .cream1{opacity:1}
+.g-layer.creamed .cream3-top,.g-layer.creamed .cream2-top,.g-layer.creamed .cream1-top{opacity:1;transition:opacity 1.3s cubic-bezier(.22,.61,.36,1) .25s}
+/* 顶面奶油高光（增加立体感） */
+.g-layer .cream3-top,.g-layer .cream2-top,.g-layer .cream1-top{filter:drop-shadow(0 1px 0 rgba(255,255,255,.6))}
+/* 奶油流动光带（抹刀划过感） */
+.g-layer .cream3,.g-layer .cream2,.g-layer .cream1{position:relative}
+.g-layer.creamed .cream3,.g-layer.creamed .cream2,.g-layer.creamed .cream1{animation:creamGlow 1.6s ease-out}
+@keyframes creamGlow{0%{filter:brightness(1.4)}40%{filter:brightness(1.15)}100%{filter:brightness(1)}}
+
+/* 烤箱 */
+.oven{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:58%;aspect-ratio:1.4/1;
+  background:linear-gradient(160deg,#EFE6D3,#DCCFB4);
+  border:2px solid var(--gold-deep);border-radius:8px;
+  z-index:6;
+  box-shadow:0 6px 18px -6px rgba(92,74,58,.4),inset 0 0 0 4px rgba(201,169,97,.15);
+  transition:opacity .5s,transform .5s;
+  display:flex;align-items:center;justify-content:center;
+}
+.oven.hide{opacity:0;transform:translate(-50%,-50%) scale(.6);pointer-events:none}
+.oven-window{
+  position:relative;width:78%;height:64%;
+  background:linear-gradient(180deg,#3a2a20,#1a0f08);
+  border:2px solid var(--gold-deep);border-radius:4px;
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
+}
+.oven-glow{
+  position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 60%,rgba(255,140,40,.7),transparent 70%);
+  opacity:0;transition:opacity .3s;
+}
+.oven.baking .oven-glow{opacity:1;animation:ovenFlick 1.2s ease-in-out infinite alternate}
+@keyframes ovenFlick{from{opacity:.7}to{opacity:1}}
+.oven-text{
+  font-family:var(--en);font-size:.7rem;color:rgba(245,231,192,.5);
+  letter-spacing:.2em;text-transform:uppercase;z-index:1;
+}
+.oven.baking .oven-text{color:rgba(255,200,100,.9)}
+.oven-handle{
+  position:absolute;right:-4px;top:50%;transform:translateY(-50%);
+  width:8px;height:40%;background:var(--gold-deep);border-radius:2px;
+}
+
+/* 奶油碗（步骤1） */
+.cream-bowl{
+  position:absolute;right:4%;bottom:14%;z-index:5;
+  display:flex;flex-direction:column;align-items:center;
+  opacity:0;transform:translateY(8px);transition:all .4s;pointer-events:none;
+}
+.cream-bowl.show{opacity:1;transform:translateY(0)}
+.bowl{
+  width:46px;height:24px;
+  background:linear-gradient(180deg,#fff,#E5D9BE);
+  border:1.5px solid var(--gold);border-radius:0 0 50% 50%/0 0 100% 100%;
+  box-shadow:0 3px 8px -3px rgba(92,74,58,.3);
+}
+.cream-pile{
+  width:34px;height:22px;margin-bottom:-2px;
+  background:radial-gradient(circle at 50% 70%,#fff,#F5ECD9);
+  border-radius:50% 50% 40% 40%;
+  box-shadow:inset 0 -3px 0 rgba(201,169,97,.15);
+}
+
+/* 裱花袋（步骤2） */
+.pipe-bag{
+  position:absolute;right:6%;top:30%;z-index:5;
+  display:flex;flex-direction:column;align-items:center;
+  opacity:0;transform:translateY(8px);transition:all .4s;pointer-events:none;
+}
+.pipe-bag.show{opacity:1;transform:translateY(0)}
+.bag-body{
+  width:26px;height:38px;
+  background:linear-gradient(135deg,#fff,#E5D9BE);
+  border:1.5px solid var(--gold-deep);
+  border-radius:50% 50% 30% 30%/60% 60% 40% 40%;
+  clip-path:polygon(20% 0,80% 0,100% 70%,50% 100%,0 70%);
+}
+.bag-tip{
+  width:6px;height:10px;
+  background:var(--gold-deep);
+  clip-path:polygon(40% 0,60% 0,100% 100%,0 100%);
+  margin-top:-2px;
+}
+
+/* SVG裱花点（保留兼容） */
+.pipe-dot{transform-origin:50% 100%;animation:pipePop .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pipePop{from{transform:scale(0)}to{transform:scale(1)}}
+/* SVG装饰物 */
+.deco-item{transform-origin:50% 100%;animation:pipePop .4s cubic-bezier(.34,1.56,.64,1)}
+
+/* 精致贝壳裱花（shell border）入场动画：奶油从袋中挤出弹出 */
+.shell{
+  transform-box:fill-box;
+  transform-origin:50% 100%;
+  animation:shellPop .55s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes shellPop{
+  0%{opacity:0;transform:scale(.2) translateY(-6px)}
+  55%{opacity:1;transform:scale(1.18) translateY(0)}
+  80%{transform:scale(.96) translateY(-1px)}
+  100%{opacity:1;transform:scale(1) translateY(0)}
+}
+/* 贝壳轻微呼吸（挤完后的奶油光泽感） */
+.shell{transition:filter .3s}
+.shell:hover{filter:brightness(1.06)}
+
+/* 裱花袋挤压动画（piping 状态） */
+.pipe-bag.piping{
+  animation:bagSqueeze .45s ease-in-out infinite;
+}
+@keyframes bagSqueeze{
+  0%,100%{transform:translateY(0) scaleX(1) scaleY(1)}
+  50%{transform:translateY(2px) scaleX(.88) scaleY(1.08)}
+}
+.pipe-bag.piping .bag-body{
+  animation:bagBodySqueeze .45s ease-in-out infinite;
+}
+@keyframes bagBodySqueeze{
+  0%,100%{filter:brightness(1)}
+  50%{filter:brightness(1.12)}
+}
+.pipe-bag.piping .bag-tip{
+  animation:bagTipDrip .45s ease-in-out infinite;
+}
+@keyframes bagTipDrip{
+  0%,100%{transform:scaleY(1)}
+  50%{transform:scaleY(1.15)}
+}
+
+/* 漂浮装饰 */
+.float-deco{animation:floatY 4s ease-in-out infinite}
+.fd1{animation-delay:0s}
+.fd2{animation-delay:1.3s}
+.fd3{animation-delay:.7s}
+@keyframes floatY{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-10px) rotate(8deg)}}
+.sparkle-wrap{position:absolute;inset:0;pointer-events:none;z-index:11;overflow:visible}
+.cake-hint{
+  position:absolute;left:50%;top:4px;transform:translateX(-50%);
+  font-family:var(--en);font-size:.6rem;letter-spacing:.12em;
+  color:var(--ink-soft);opacity:.7;white-space:nowrap;
+  pointer-events:none;
+}
+
+/* 步骤进度条 */
+.steps{
+  display:flex;align-items:center;justify-content:center;
+  gap:6px;flex-shrink:0;margin:6px 0 4px;
+}
+.step{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  opacity:.4;transition:opacity .3s;
+}
+.step.active{opacity:1}
+.step.done{opacity:.8}
+.step-num{
+  width:22px;height:22px;border-radius:50%;
+  border:1px solid var(--gold);background:rgba(255,255,255,.7);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:.78rem;color:var(--ink-soft);
+  transition:all .3s;
+}
+.step.active .step-num{background:var(--rose);color:#fff;border-color:var(--rose-deep);box-shadow:0 0 0 3px rgba(160,64,64,.18)}
+.step.done .step-num{background:var(--gold);color:#fff;border-color:var(--gold-deep)}
+.step-label{font-family:var(--en);font-size:.6rem;letter-spacing:.1em;color:var(--ink-soft);text-transform:lowercase}
+.step.active .step-label{color:var(--ink)}
+.step-line{width:24px;height:1px;background:var(--gold-soft)}
+.step-line.done{background:var(--gold)}
+
+/* 工具操作区 */
+.tools{
+  flex-shrink:0;min-height:62px;
+  display:flex;align-items:center;justify-content:center;
+}
+.tool-panel{
+  display:none;flex-direction:column;align-items:center;gap:6px;width:100%;
+}
+.tool-panel.active{display:flex;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.tool-tip{font-family:var(--en);font-size:.66rem;letter-spacing:.08em;color:var(--ink-soft);text-align:center}
+.tool-btn{
+  font-family:var(--serif);font-size:.88rem;letter-spacing:.18em;
+  text-transform:uppercase;color:#fff;
+  background:linear-gradient(135deg,var(--rose),var(--rose-deep));
+  border:1px solid var(--rose-deep);
+  padding:8px 26px;border-radius:999px;cursor:pointer;
+  box-shadow:0 6px 18px -8px rgba(126,46,46,.55);
+  transition:all .25s;
+}
+.tool-btn:hover{transform:translateY(-2px);letter-spacing:.22em}
+.tool-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.tool-hint{font-family:var(--en);font-size:.62rem;color:var(--ink-soft);letter-spacing:.06em}
+.tool-done{font-family:var(--hand);font-size:1.1rem;color:var(--rose-deep);letter-spacing:.04em}
+
+/* 裱花调色板 */
+.pipe-palette,.topping-palette{display:flex;gap:8px;align-items:center}
+.pipe-color{
+  width:24px;height:24px;border-radius:50%;cursor:pointer;
+  border:2px solid rgba(255,255,255,.8);
+  box-shadow:0 2px 5px rgba(0,0,0,.15);transition:all .2s;
+}
+.pipe-color.active{transform:scale(1.2);border-color:var(--rose);box-shadow:0 0 0 2px rgba(160,64,64,.3),0 2px 5px rgba(0,0,0,.15)}
+.topping{
+  width:30px;height:30px;border-radius:50%;cursor:pointer;
+  border:1px solid var(--gold-soft);background:rgba(255,255,255,.7);
+  display:flex;align-items:center;justify-content:center;font-size:.9rem;
+  transition:all .2s;
+}
+.topping.active{transform:scale(1.15);border-color:var(--rose);box-shadow:0 0 0 2px rgba(160,64,64,.3)}
+
+/* 蛋糕可点击状态 */
+.cake-scene.clickable{cursor:pointer}
+.cake-scene.clickable .cake-svg{filter:drop-shadow(0 8px 14px rgba(92,74,58,.18)) brightness(1.02)}
+.cake-scene.clickable .g-layer.shown{cursor:pointer}
+
+/* ========== CANDLES ========== */
+/* 蜡烛容器：JS设置 left/top 定位到蛋糕顶层；transform 使容器底部对齐 top（蜡烛立于蛋糕顶上） */
+.candles{
+  position:absolute;
+  transform:translate(-50%,-100%);
+  display:flex;align-items:flex-end;justify-content:center;
+  gap:6px;z-index:10;pointer-events:none;
+  /* left/top 由 syncCandlesPos() 设置 */
+}
+.candles.hidden{display:none}
+.candles.appear{animation:candlesRise .8s cubic-bezier(.34,1.56,.64,1)}
+@keyframes candlesRise{
+  from{opacity:0;transform:translate(-50%,-100%) translateY(20px) scale(.6)}
+  to{opacity:1;transform:translate(-50%,-100%) translateY(0) scale(1)}
+}
+.candle{
+  position:relative;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;
+  width:6px;flex-shrink:0;transition:transform .15s ease;pointer-events:auto;
+}
+.candle:hover{transform:translateY(-2px) scale(1.05)}
+.candle:active{transform:translateY(0) scale(.98)}
+.stick{
+  position:relative;width:100%;height:20px;
+  border-radius:1.5px 1.5px 1px 1px;
+  background:repeating-linear-gradient(45deg,var(--pink-1) 0 2px,var(--pink-2) 2px 4px);
+  box-shadow:inset -1.5px 0 0 rgba(0,0,0,.08),inset 1.5px 0 0 rgba(255,255,255,.35),inset 0 -2px 0 rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.12);
+  overflow:visible;
+}
+.stick.c2{background:repeating-linear-gradient(45deg,#FFE8CC 0 2px,var(--peach) 2px 4px)}
+.stick.c3{background:repeating-linear-gradient(45deg,#E8DCF0 0 2px,var(--lilac) 2px 4px)}
+.stick.c4{background:repeating-linear-gradient(45deg,#D4EADC 0 2px,var(--mint) 2px 4px)}
+.stick.c5{background:repeating-linear-gradient(45deg,#FFF2CC 0 2px,var(--lemon) 2px 4px)}
+.stick.c6{background:repeating-linear-gradient(45deg,#FCE4EC 0 2px,#F8BBD0 2px 4px)}
+.stick.c7{background:repeating-linear-gradient(45deg,#E1BEE7 0 2px,#CE93D8 2px 4px)}
+.stripe{position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.55);transform:skewY(-8deg)}
+.stripe.s1{top:18%}.stripe.s2{top:38%}.stripe.s3{top:58%}.stripe.s4{top:78%}
+.drip{position:absolute;top:0;width:30%;height:0;background:inherit;filter:brightness(1.05);border-radius:0 0 50% 50%;transition:height .6s ease}
+.candle.on .drip{height:18%}
+.drip.d1{left:14%}
+.drip.d2{right:10%;transition-delay:.2s}
+.candle.on .drip.d2{height:12%}
+.wick{
+  position:absolute;top:-4px;left:50%;transform:translateX(-50%);
+  width:1px;height:4px;
+  background:linear-gradient(180deg,#3a2a20 20%,#6B5A4A 100%);
+  border-radius:1px;z-index:2;
+}
+.candle.on .wick{top:-5px;background:linear-gradient(180deg,#1a0f08,#3a2a20)}
+.flame-wrap{
+  position:absolute;top:-16px;left:50%;transform:translateX(-50%) scale(.2);
+  width:9px;height:13px;opacity:0;
+  transition:opacity .25s,transform .35s cubic-bezier(.34,1.56,.64,1);
+  pointer-events:none;transform-origin:50% 100%;
+}
+.candle.on .flame-wrap{opacity:1;transform:translateX(-50%) scale(1);animation:flameFloat 2.4s ease-in-out infinite alternate}
+@keyframes flameFloat{
+  0%{transform:translateX(-50%) scale(1) rotate(-3deg)}
+  50%{transform:translateX(-50%) scale(1.04,.96) rotate(2deg)}
+  100%{transform:translateX(-50%) scale(.97,1.04) rotate(-2deg)}
+}
+.flame-glow{
+  position:absolute;top:-3px;left:-5px;right:-5px;bottom:-4px;
+  background:radial-gradient(circle at 50% 65%,rgba(255,200,100,.55) 0%,rgba(255,150,60,.28) 40%,transparent 75%);
+  border-radius:50%;filter:blur(2px);animation:glowPulse 1.2s ease-in-out infinite alternate;
+}
+@keyframes glowPulse{from{opacity:.7;transform:scale(.95)}to{opacity:1;transform:scale(1.1)}}
+.flame-outer{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 75%,#FF8A3D 0%,#FF6B2A 45%,#E84A1F 75%,transparent 100%);
+  border-radius:50% 50% 50% 50% / 65% 65% 35% 35%;
+  filter:blur(.4px);transform-origin:50% 100%;animation:flickA .25s ease-in-out infinite alternate;
+}
+.flame-mid{
+  position:absolute;inset:12% 18% 8% 18%;
+  background:radial-gradient(ellipse at 50% 75%,#FFE08A 0%,#FFB84D 50%,#FF8A3D 90%);
+  border-radius:50% 50% 50% 50% / 65% 65% 35% 35%;
+  transform-origin:50% 100%;animation:flickB .2s ease-in-out infinite alternate;
+}
+.flame-inner{
+  position:absolute;inset:32% 32% 22% 32%;
+  background:radial-gradient(ellipse at 50% 70%,#FFFFFF 0%,#FFF9DC 40%,#FFE08A 85%);
+  border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+  animation:flickC .18s ease-in-out infinite alternate;
+}
+@keyframes flickA{from{transform:scaleY(1) scaleX(1) rotate(-2deg)}to{transform:scaleY(1.08) scaleX(.95) rotate(2deg)}}
+@keyframes flickB{from{transform:scaleY(.95) scaleX(1.06) rotate(1deg)}to{transform:scaleY(1.05) scaleX(.96) rotate(-1.5deg)}}
+@keyframes flickC{from{transform:scale(1) translateY(0)}to{transform:scale(1.08) translateY(-2px)}}
+.smoke{
+  position:absolute;top:-15px;left:50%;transform:translateX(-50%);
+  width:7px;height:7px;border-radius:50%;
+  background:radial-gradient(circle,rgba(180,180,190,.6) 0%,transparent 70%);
+  opacity:0;pointer-events:none;
+}
+.candle.blown .smoke{animation:smokeRise 1.4s ease-out forwards}
+@keyframes smokeRise{
+  0%{opacity:.8;transform:translate(-50%,0) scale(.4)}
+  50%{opacity:.5;transform:translate(-40%,-16px) scale(1.2)}
+  100%{opacity:0;transform:translate(-55%,-38px) scale(1.8)}
+}
+
+/* ========== 抽拉式信封 ========== */
+.env-stage{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  flex:1 1 auto;gap:18px;min-height:0;overflow:hidden;
+  padding:20px;
+}
+.env-stage[hidden]{display:none}
+.env-title{
+  font-family:var(--serif);font-style:italic;font-weight:500;
+  font-size:1.4rem;color:var(--rose-deep);letter-spacing:.06em;
+  text-align:center;opacity:0;transform:translateY(8px);
+  transition:opacity .6s .2s,transform .6s .2s;
+}
+.env-stage.fade-in .env-title{opacity:1;transform:translateY(0)}
+/* 面板淡出过渡 */
+.bakery{transition:opacity .5s,transform .5s}
+.bakery.fade-out{opacity:0;transform:scale(.96);pointer-events:none}
+.bakery[hidden]{display:none !important}
+.bottom{transition:opacity .5s,transform .5s}
+.bottom.fade-out{opacity:0;transform:translateY(8px);pointer-events:none}
+.bottom[hidden]{display:none !important}
+.env-stage.fade-in{animation:envFadeIn .6s ease-out}
+@keyframes envFadeIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+.env-sleeve{
+  position:relative;width:240px;height:170px;
+  cursor:pointer;user-select:none;
+  transition:transform .4s ease;
+  overflow:hidden;
+}
+.env-sleeve.show-overflow{overflow:visible}
+.env-sleeve:hover{transform:translateY(-3px)}
+/* 封套背面 */
+.sleeve-back{
+  position:absolute;inset:0;
+  background:linear-gradient(160deg,#FBF3E4,#EDDFC2);
+  border:1.5px solid var(--gold-deep);border-radius:3px;
+  box-shadow:0 10px 26px -10px rgba(92,74,58,.35);
+  z-index:1;
+}
+/* 信纸（藏在封套内，初始下移隐藏） */
+.letter{
+  position:absolute;left:12px;right:12px;bottom:8px;top:8px;
+  background:
+    repeating-linear-gradient(0deg,transparent 0 24px,rgba(201,169,97,.1) 24px 25px),
+    linear-gradient(180deg,#FFFCF4,#FBF5E8);
+  border:1px solid var(--gold-soft);
+  z-index:2;
+  transform:translateY(78%);opacity:.6;
+  transition:transform .9s cubic-bezier(.22,1,.36,1),opacity .5s;
+  box-shadow:0 4px 14px -6px rgba(92,74,58,.3);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  border-radius:2px;
+}
+.env-sleeve.open .letter{
+  transform:translateY(-92%);
+  opacity:1;
+  box-shadow:0 18px 40px -12px rgba(92,74,58,.4);
+}
+.letter-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 14px 6px;
+  border-bottom:1px dashed rgba(201,169,97,.35);
+}
+.letter-eyebrow{
+  font-family:var(--serif);font-style:italic;font-size:.78rem;
+  color:var(--ink-soft);letter-spacing:.06em;
+}
+.letter-stamp{
+  font-family:var(--serif);font-weight:600;font-size:.68rem;
+  color:#fff;background:var(--rose-deep);
+  padding:3px 7px;border-radius:2px;
+  transform:rotate(6deg);box-shadow:0 1px 3px rgba(0,0,0,.2);
+}
+.letter-body{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;text-align:center;padding:0 14px;
+}
+.letter-main{
+  font-family:var(--cn);font-weight:400;font-size:1.5rem;
+  color:var(--rose-deep);letter-spacing:.22em;
+  text-shadow:0 1px 0 rgba(255,255,255,.6);
+}
+.letter-divider{color:var(--gold);font-size:.9rem}
+.letter-sign{
+  font-family:var(--hand);font-size:1rem;color:var(--ink-soft);
+}
+.letter-foot{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:6px 14px 10px;
+  border-top:1px dashed rgba(201,169,97,.35);
+}
+.letter-wax{
+  width:24px;height:24px;border-radius:50%;
+  background:radial-gradient(circle at 32% 28%,#C86060,var(--rose-deep) 70%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-style:italic;font-size:.72rem;color:#F5E7C0;
+  box-shadow:0 1px 3px rgba(0,0,0,.3),inset 0 0 0 1px rgba(255,255,255,.2);
+}
+.letter-date{
+  font-family:var(--serif);font-style:italic;font-size:.7rem;
+  color:var(--ink-soft);letter-spacing:.1em;
+}
+/* 封套前盖（带V型开口，遮住信纸下半部） */
+.sleeve-front{
+  position:absolute;left:0;right:0;bottom:0;height:62%;z-index:3;
+  background:linear-gradient(160deg,#FBF3E4,#E5D9BE);
+  border:1.5px solid var(--gold-deep);border-top:none;
+  border-radius:0 0 3px 3px;
+  overflow:hidden;
+  box-shadow:0 -2px 8px -4px rgba(92,74,58,.2);
+}
+.sleeve-v{
+  position:absolute;top:0;left:0;right:0;height:32px;
+  background:linear-gradient(160deg,#F4ECD9,#DCCFB4);
+  clip-path:polygon(0 0,100% 0,50% 100%);
+}
+/* 封套前盖在V口和印章区域内的边缘柔和过渡 */
+.sleeve-front{padding-top:18px}
+.sleeve-label{
+  position:absolute;left:50%;bottom:14%;transform:translateX(-50%);
+  font-family:var(--serif);font-style:italic;font-weight:600;
+  font-size:.9rem;color:var(--gold-deep);letter-spacing:.12em;opacity:.6;
+}
+/* 拉片提示 */
+.sleeve-pull{
+  position:absolute;top:-18px;left:50%;transform:translateX(-50%);
+  font-family:var(--en);font-size:.6rem;letter-spacing:.18em;
+  color:var(--ink-soft);text-transform:uppercase;
+  background:rgba(255,255,255,.8);border:1px solid var(--gold-soft);
+  padding:2px 10px;border-radius:999px;
+  animation:pullBounce 1.8s ease-in-out infinite;
+  z-index:4;white-space:nowrap;
+}
+@keyframes pullBounce{0%,100%{transform:translateX(-50%) translateY(0);opacity:.7}50%{transform:translateX(-50%) translateY(-4px);opacity:1}}
+.env-sleeve.open .sleeve-pull{opacity:0;transition:opacity .3s;animation:none}
+.env-hint{font-family:var(--en);font-size:.66rem;letter-spacing:.16em;color:var(--ink-soft);text-transform:lowercase}
+
+/* ===== BOTTOM ===== */
+.bottom{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0}
+.blow{
+  font-family:var(--serif);font-size:.95rem;letter-spacing:.18em;
+  text-transform:uppercase;color:#fff;
+  background:linear-gradient(135deg,var(--rose),var(--rose-deep));
+  border:1px solid var(--rose-deep);
+  padding:11px 34px;border-radius:999px;cursor:pointer;
+  box-shadow:0 10px 26px -10px rgba(126,46,46,.55);
+  transition:all .28s;display:flex;align-items:center;gap:10px;
+}
+.blow:hover:not(:disabled){transform:translateY(-2px);letter-spacing:.22em}
+.blow:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.blow-ico{font-size:.9rem}
+.foot-sign{font-family:var(--hand);font-size:.95rem;color:var(--ink-soft);letter-spacing:.04em}
+
+/* ===== WISH ===== */
+.wish{position:fixed;inset:0;z-index:90;background:rgba(255,253,245,.96);display:none;align-items:center;justify-content:center}
+.wish.show{display:flex;animation:fadeIn2 .3s}
+@keyframes fadeIn2{from{opacity:0}to{opacity:1}}
+.wish-card{
+  text-align:center;padding:38px 40px;
+  border:1px solid var(--gold-soft);border-radius:2px;
+  background:rgba(255,255,255,.7);max-width:320px;
+  animation:cardIn .5s cubic-bezier(.22,1,.36,1);
+}
+.wish-deco{font-size:1.7rem;color:var(--rose);margin-bottom:8px;animation:tw 2s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.5;transform:scale(.9)}50%{opacity:1;transform:scale(1.1)}}
+.wish-card h3{font-family:var(--serif);font-style:italic;font-size:1.4rem;color:var(--ink);margin-bottom:8px}
+.wish-tip{font-size:.85rem;color:var(--ink-soft);margin-bottom:24px;letter-spacing:.04em}
+.wish-blow{
+  font-family:var(--serif);font-size:.95rem;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--ink);
+  background:transparent;border:1px solid var(--gold);
+  padding:10px 32px;border-radius:999px;cursor:pointer;transition:all .3s;
+}
+.wish-blow:hover{background:var(--gold);color:#fff}
+
+/* ===== TOAST ===== */
+.toast{
+  position:fixed;bottom:22px;left:50%;
+  transform:translateX(-50%) translateY(16px);
+  z-index:120;padding:8px 22px;
+  background:rgba(255,255,255,.92);border:1px solid var(--gold-soft);
+  border-radius:999px;font-family:var(--cn);font-size:.85rem;
+  color:var(--ink);opacity:0;pointer-events:none;
+  transition:opacity .35s,transform .35s;letter-spacing:.04em;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ===== CONFETTI / SPARKLE ===== */
+.confetti{position:fixed;top:-10px;pointer-events:none;z-index:110;opacity:.85;border-radius:1px;animation:fall linear forwards}
+@keyframes fall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(480deg);opacity:.6}}
+.sparkle-p{position:fixed;pointer-events:none;z-index:111;font-size:10px;color:var(--gold);animation:sparkleOut .7s ease-out forwards}
+@keyframes sparkleOut{
+  0%{opacity:1;transform:translate(0,0) scale(1) rotate(0)}
+  100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.3) rotate(180deg)}
+}
+
+/* ===== CREDIT ===== */
+.credit{
+  position:fixed;bottom:6px;right:10px;z-index:5;
+  font-family:var(--en);font-size:.6rem;letter-spacing:.12em;
+  color:var(--ink-soft);opacity:.5;pointer-events:none;
+  text-transform:lowercase;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:880px){
+  .center{flex-direction:column;gap:8px}
+  .bakery{flex:1 1 auto;padding:8px 10px 10px}
+  .env-stage{flex:1 1 auto;gap:10px;padding:14px}
+  .env-sleeve{width:220px;height:156px}
+  .letter-main{font-size:1.3rem}
+  .stage{padding:10px 16px 8px;gap:6px}
+  .who-name{font-size:1.25rem}
+  .stick{height:18px}
+  .flame-wrap{top:-14px;width:8px;height:12px}
+  .candle{width:5px}
+  .candles{gap:4px}
+  .wick{top:-3px;height:3px;width:1px}
+  .smoke{top:-12px;width:6px;height:6px}
+  .tool-tip{font-size:.62rem}
+  .step-label{font-size:.55rem}
+  .step-num{width:20px;height:20px;font-size:.7rem}
+  .step-line{width:16px}
+}
+@media(max-width:520px){
+  .env-sleeve{width:200px;height:142px}
+  .letter-main{font-size:1.15rem;letter-spacing:.12em}
+  .letter-eyebrow{font-size:.7rem}
+  .letter-sign{font-size:.9rem}
+  .blow{padding:9px 24px;font-size:.78rem;letter-spacing:.12em}
+  .music-label{display:none}
+  .music{padding:6px 10px}
+  .intro-title{font-size:2rem}
+  .stage{padding:8px 12px 6px}
+  .who-name{font-size:1.1rem}
+  .who-sub{font-size:.85rem}
+  .who-badge{width:40px;height:40px}
+  .foot-sign{font-size:.85rem}
+  .stick{height:16px}
+  .flame-wrap{top:-12px;width:7px;height:10px}
+  .candle{width:4px}
+  .candles{gap:3px}
+  .wick{top:-3px;height:3px;width:1px}
+  .smoke{top:-10px;width:5px;height:5px}
+  .tool-btn{font-size:.78rem;padding:7px 20px}
+  .pipe-color{width:20px;height:20px}
+  .topping{width:26px;height:26px;font-size:.8rem}
+  .bakery{padding:6px 8px 8px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}

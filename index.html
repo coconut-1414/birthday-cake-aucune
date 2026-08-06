@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday · Aucune</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Caveat:wght@400;500;600&family=Quicksand:wght@300;400;500&family=Noto+Serif+SC:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=9">
+</head>
+<body>
+
+    <!-- 极繁少女风背景 -->
+    <div class="bg" aria-hidden="true"></div>
+
+    <!-- 开场卡片 -->
+    <div class="intro" id="intro">
+        <div class="intro-card">
+            <p class="intro-from">from 🥥 coco</p>
+            <h1 class="intro-title">happy birthday<br><span>Aucune</span></h1>
+            <button class="intro-btn" id="introBtn">open</button>
+        </div>
+    </div>
+
+    <!-- 主舞台（单屏，不滚动） -->
+    <main class="stage" id="stage">
+
+        <!-- 顶栏 -->
+        <header class="topbar">
+            <div class="who">
+                <div class="who-badge">
+                    <span class="who-star">✦</span>
+                </div>
+                <div class="who-text">
+                    <h1 class="who-name">Aucune</h1>
+                    <p class="who-sub">happy birthday · 8.8</p>
+                </div>
+            </div>
+            <button class="music" id="musicBtn" aria-label="music">
+                <span class="music-dot"></span>
+                <span class="music-label">music</span>
+            </button>
+        </header>
+
+        <!-- 中间区：蛋糕制作台 + 信封（两界面切换） -->
+        <section class="center">
+
+            <!-- ===== 界面1：蛋糕制作台 ===== -->
+            <div class="bakery" id="bakeryPanel">
+                <!-- 蛋糕展示区（精致SVG立体蛋糕） -->
+                <div class="cake-scene" id="cakeScene">
+                    <svg class="cake-svg" viewBox="0 0 400 360" preserveAspectRatio="xMidYMax meet">
+                        <defs>
+                            <radialGradient id="topG3" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#FFF5F5"/><stop offset="100%" stop-color="#E892A4"/>
+                            </radialGradient>
+                            <radialGradient id="topG2" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#FFF3E4"/><stop offset="100%" stop-color="#EDB890"/>
+                            </radialGradient>
+                            <radialGradient id="topG1" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#F4E8FC"/><stop offset="100%" stop-color="#B898D4"/>
+                            </radialGradient>
+                            <linearGradient id="spongeG" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#EFD2A6"/><stop offset="100%" stop-color="#CBA470"/>
+                            </linearGradient>
+                            <linearGradient id="sideG3" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#FAD0DA"/><stop offset="100%" stop-color="#D98298"/>
+                            </linearGradient>
+                            <linearGradient id="sideG2" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#FCE4D0"/><stop offset="100%" stop-color="#DE9E78"/>
+                            </linearGradient>
+                            <linearGradient id="sideG1" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#DCCBEB"/><stop offset="100%" stop-color="#9D7FBE"/>
+                            </linearGradient>
+                            <linearGradient id="plateG" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#D8C8A8"/>
+                            </linearGradient>
+                            <radialGradient id="shadowG" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="rgba(92,74,58,.35)"/><stop offset="100%" stop-color="transparent"/>
+                            </radialGradient>
+                        </defs>
+
+                        <!-- 地面阴影 -->
+                        <ellipse cx="200" cy="340" rx="175" ry="13" fill="url(#shadowG)"/>
+
+                        <!-- 蛋糕盘 -->
+                        <g class="g-plate">
+                            <ellipse cx="200" cy="330" rx="172" ry="18" fill="url(#plateG)" stroke="#C9A961" stroke-width="1.5"/>
+                            <ellipse cx="200" cy="324" rx="158" ry="12" fill="none" stroke="#E0D2B0" stroke-width="1"/>
+                        </g>
+
+                        <!-- === 第3层（底）侧高52：顶276底328 === -->
+                        <g class="g-layer g-l3" data-layer="3">
+                            <path class="l3-side sponge" d="M50,276 L50,328 Q200,346 350,328 L350,276" fill="url(#spongeG)"/>
+                            <path class="l3-side cream3" d="M50,276 L50,328 Q200,346 350,328 L350,276" fill="url(#sideG3)" opacity="0"/>
+                            <ellipse class="l3-top sponge-top" cx="200" cy="276" rx="150" ry="22" fill="url(#spongeG)"/>
+                            <ellipse class="l3-top cream3-top" cx="200" cy="276" rx="150" ry="22" fill="url(#topG3)" opacity="0"/>
+                            <!-- 侧面奶油抹痕：同色系淡高光（不再是扎眼的纯白） -->
+                            <g class="deco-zone" data-layer="3"></g>
+                        </g>
+
+                        <!-- === 第2层（中）侧高46：顶230底276 === -->
+                        <g class="g-layer g-l2" data-layer="2">
+                            <path class="l2-side sponge" d="M85,230 L85,276 Q200,294 315,276 L315,230" fill="url(#spongeG)"/>
+                            <path class="l2-side cream2" d="M85,230 L85,276 Q200,294 315,276 L315,230" fill="url(#sideG2)" opacity="0"/>
+                            <ellipse class="l2-top sponge-top" cx="200" cy="230" rx="115" ry="18" fill="url(#spongeG)"/>
+                            <ellipse class="l2-top cream2-top" cx="200" cy="230" rx="115" ry="18" fill="url(#topG2)" opacity="0"/>
+                            <g class="deco-zone" data-layer="2"></g>
+                        </g>
+
+                        <!-- === 第1层（顶）侧高40：顶190底230 === -->
+                        <g class="g-layer g-l1" data-layer="1">
+                            <path class="l1-side sponge" d="M118,190 L118,230 Q200,248 282,230 L282,190" fill="url(#spongeG)"/>
+                            <path class="l1-side cream1" d="M118,190 L118,230 Q200,248 282,230 L282,190" fill="url(#sideG1)" opacity="0"/>
+                            <ellipse class="l1-top sponge-top" cx="200" cy="190" rx="82" ry="14" fill="url(#spongeG)"/>
+                            <ellipse class="l1-top cream1-top" cx="200" cy="190" rx="82" ry="14" fill="url(#topG1)" opacity="0"/>
+                            <g class="deco-zone" data-layer="1"></g>
+                        </g>
+
+                        <!-- 漂浮装饰 -->
+                        <text class="float-deco fd1" x="30" y="40" font-size="16" fill="#A04040">✦</text>
+                        <text class="float-deco fd2" x="365" y="55" font-size="14" fill="#C9A961">♡</text>
+                        <text class="float-deco fd3" x="370" y="180" font-size="12" fill="#A04040">✦</text>
+                    </svg>
+
+                    <!-- 蜡烛（步骤4后显示，HTML定位在蛋糕顶部） -->
+                    <div class="candles hidden" id="candles"></div>
+
+                    <!-- 烤箱覆盖层 -->
+                    <div class="oven" id="oven">
+                        <div class="oven-window">
+                            <div class="oven-glow" id="ovenGlow"></div>
+                            <div class="oven-text">empty</div>
+                        </div>
+                        <div class="oven-handle"></div>
+                    </div>
+
+                    <!-- 裱花袋（步骤2出现） -->
+                    <div class="pipe-bag" id="pipeBag">
+                        <div class="bag-body"></div>
+                        <div class="bag-tip"></div>
+                    </div>
+                    <!-- 奶油碗（步骤1出现） -->
+                    <div class="cream-bowl" id="creamBowl">
+                        <div class="bowl"></div>
+                        <div class="cream-pile"></div>
+                    </div>
+
+                    <div class="sparkle-wrap" id="sparkleWrap"></div>
+                    <p class="cake-hint">step <span id="litNum">1</span>/4 · <span id="stepHint">bake</span></p>
+                </div>
+
+                <!-- 步骤进度条 -->
+                <div class="steps" id="steps">
+                    <div class="step active" data-step="0">
+                        <span class="step-num">1</span><span class="step-label">bake</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="1">
+                        <span class="step-num">2</span><span class="step-label">cream</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="2">
+                        <span class="step-num">3</span><span class="step-label">pipe</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="3">
+                        <span class="step-num">4</span><span class="step-label">decorate</span>
+                    </div>
+                </div>
+
+                <!-- 当前步骤操作区 -->
+                <div class="tools" id="tools">
+                    <div class="tool-panel active" data-step="0">
+                        <p class="tool-tip">put sponge in oven · 把蛋糕胚放进烤箱</p>
+                        <button class="tool-btn" id="bakeBtn">bake · 烤</button>
+                    </div>
+                    <div class="tool-panel" data-step="1">
+                        <p class="tool-tip">whisk cream & frost · 打发奶油抹面</p>
+                        <p class="tool-done" id="creamStatus">frosting · 抹奶油中…</p>
+                    </div>
+                    <div class="tool-panel" data-step="2">
+                        <p class="tool-tip">piping shells · 贝壳裱花中…</p>
+                        <p class="tool-done" id="pipeStatus">piping · 裱花中…</p>
+                    </div>
+                    <div class="tool-panel" data-step="3">
+                        <p class="tool-tip">pick topping & tap cake · 选装饰点蛋糕</p>
+                        <div class="topping-palette" id="toppingPalette">
+                            <button class="topping active" data-t="strawberry" title="草莓">
+                                <svg viewBox="0 0 20 20" width="20" height="20"><path d="M10 4 C7 4 5 7 5 11 C5 15 7 17 10 17 C13 17 15 15 15 11 C15 7 13 4 10 4 Z" fill="#E8788C"/><path d="M7 4 L8 2 L10 3 L12 2 L13 4 L10 5 Z" fill="#7CB342"/><circle cx="8" cy="9" r=".6" fill="#fff"/><circle cx="11" cy="10" r=".6" fill="#fff"/><circle cx="9" cy="12" r=".6" fill="#fff"/><circle cx="12" cy="13" r=".6" fill="#fff"/></svg>
+                            </button>
+                            <button class="topping" data-t="macaron" title="马卡龙">
+                                <svg viewBox="0 0 20 20" width="20" height="20"><ellipse cx="10" cy="7" rx="6" ry="2.5" fill="#F7C8D2"/><ellipse cx="10" cy="13" rx="6" ry="2.5" fill="#F7C8D2"/><rect x="4" y="8.5" width="12" height="3" fill="#FBE0D0"/><ellipse cx="10" cy="7" rx="6" ry="2.5" fill="none" stroke="#E8B0BC" stroke-width=".5"/></svg>
+                            </button>
+                            <button class="topping" data-t="flower" title="小花">
+                                <svg viewBox="0 0 20 20" width="20" height="20"><g fill="#F7C8D2"><circle cx="10" cy="6" r="3"/><circle cx="6" cy="10" r="3"/><circle cx="14" cy="10" r="3"/><circle cx="8" cy="14" r="3"/><circle cx="12" cy="14" r="3"/></g><circle cx="10" cy="10" r="2" fill="#FBE3A0"/></svg>
+                            </button>
+                            <button class="topping" data-t="star" title="糖珠星">
+                                <svg viewBox="0 0 20 20" width="20" height="20"><path d="M10 3 L12 8 L17 8.5 L13 12 L14 17 L10 14.5 L6 17 L7 12 L3 8.5 L8 8 Z" fill="#FBE3A0" stroke="#E8C878" stroke-width=".5"/></svg>
+                            </button>
+                        </div>
+                        <p class="tool-hint">toppings: <span id="decoCount">0</span>/5</p>
+                    </div>
+                    <div class="tool-panel" data-step="4">
+                        <p class="tool-done">cake done ♡ light the candles</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 界面2：信封（吹蜡烛后切换显示） ===== -->
+            <div class="env-stage" id="envPanel" hidden>
+                <p class="env-title">a little note for you ♡</p>
+                <div class="env-sleeve" id="envelope">
+                    <!-- 信封外壳（封套） -->
+                    <div class="sleeve-back"></div>
+                    <!-- 信纸（藏在封套里，抽拉出来） -->
+                    <div class="letter" id="letter">
+                        <div class="letter-head">
+                            <span class="letter-stamp">8.8</span>
+                            <p class="letter-eyebrow">pour toi · 给你</p>
+                        </div>
+                        <div class="letter-body">
+                            <p class="letter-main">天天开心</p>
+                            <div class="letter-divider"><span>✦</span></div>
+                            <p class="letter-sign">— coco ♡</p>
+                        </div>
+                        <div class="letter-foot">
+                            <span class="letter-wax">C</span>
+                            <p class="letter-date">08 · 08</p>
+                        </div>
+                    </div>
+                    <!-- 封套前盖（V型开口，遮住信纸下半部） -->
+                    <div class="sleeve-front">
+                        <div class="sleeve-v"></div>
+                        <div class="sleeve-label">A ♡ C</div>
+                    </div>
+                    <!-- 拉片（提示可抽） -->
+                    <div class="sleeve-pull" id="sleevePull">↑ pull</div>
+                </div>
+                <p class="env-hint">tap to pull out · 轻触抽出</p>
+            </div>
+
+        </section>
+
+        <!-- 底部：吹蜡烛 / 重做 -->
+        <footer class="bottom" id="bottomBar">
+            <button class="blow" id="blowBtn" disabled>
+                <span class="blow-ico">✦</span>
+                <span>make a wish · 许愿吹蜡烛</span>
+            </button>
+            <p class="foot-sign">coco ♡ Aucune · 8.8</p>
+        </footer>
+
+    </main>
+
+    <!-- 许愿屏 -->
+    <div class="wish" id="wish">
+        <div class="wish-card">
+            <p class="wish-deco">✦</p>
+            <h3>make a wish</h3>
+            <p class="wish-tip">close your eyes…</p>
+            <button class="wish-blow" id="wishBlow">blow · 呼～</button>
+        </div>
+    </div>
+
+    <div id="confetti" aria-hidden="true"></div>
+    <div class="toast" id="toast">天天开心 ♡</div>
+
+    <!-- 作者署名 -->
+    <div class="credit">made with ♡ by coco</div>
+
+    <audio id="bgAudio" loop>
+        <source src="audio/happy_birthday.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
