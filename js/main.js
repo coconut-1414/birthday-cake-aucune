@@ -551,26 +551,26 @@
     const defs = svgEl.querySelector('defs');
 
     const creamDefs = `
-      <!-- 莫兰迪色系裱花渐变 -->
+      <!-- 莫兰迪色系·明亮版裱花渐变 -->
       <radialGradient id="creamG1" cx="50%" cy="15%" r="80%">
         <stop offset="0%" stop-color="#FFFFFF"/>
-        <stop offset="45%" stop-color="#F9EEF1"/>
-        <stop offset="100%" stop-color="#CFA0A9"/>
+        <stop offset="45%" stop-color="#FCF0F3"/>
+        <stop offset="100%" stop-color="#DFB0B9"/>
       </radialGradient>
       <radialGradient id="creamG2" cx="50%" cy="15%" r="80%">
         <stop offset="0%" stop-color="#FFFFFF"/>
-        <stop offset="45%" stop-color="#FAF1E7"/>
-        <stop offset="100%" stop-color="#D1B29A"/>
+        <stop offset="45%" stop-color="#FCF3E9"/>
+        <stop offset="100%" stop-color="#E1C0A8"/>
       </radialGradient>
       <radialGradient id="creamG3" cx="50%" cy="15%" r="80%">
         <stop offset="0%" stop-color="#FFFFFF"/>
-        <stop offset="45%" stop-color="#F3EEFA"/>
-        <stop offset="100%" stop-color="#AE9EC0"/>
+        <stop offset="45%" stop-color="#F5EFFB"/>
+        <stop offset="100%" stop-color="#BBA8D0"/>
       </radialGradient>
       <filter id="creamShadow" x="-20%" y="-20%" width="140%" height="160%">
         <feGaussianBlur in="SourceAlpha" stdDeviation="1"/>
         <feOffset dx="0" dy="1.5"/>
-        <feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
+        <feComponentTransfer><feFuncA type="linear" slope="0.28"/></feComponentTransfer>
         <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
       </filter>
     `;
